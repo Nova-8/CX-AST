@@ -1,5 +1,3 @@
 # GH Demo
 
 Main.
-
-Ok
