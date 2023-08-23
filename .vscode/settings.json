@@ -1,0 +1,11 @@
+{
+  "cx.server": {
+    "url": "http://checkmarxn8/",
+    "alias": "CxSAST",
+    "username": "n8user",
+    "password": "gJl2uOFRp/B1n/CTEqjTIE17jqHu0UEdu2U=",
+    "project_id": 243,
+    "team_id": 1,
+    "project_name": "TRP_JavaApp"
+  }
+}
