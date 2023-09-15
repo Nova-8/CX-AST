@@ -25,30 +25,19 @@ jobs:
       - name: Mkdir results-dir
         # make sure results dir is created
         run: mkdir -p results-dir
-      - name: Create config file
-        # creating a heredoc config file
-        run: |
-          cat <<EOF >>kics.config
-          {
-            "exclude-categories": "Encryption",
-            "exclude-paths": "terraform/gcp/big_data.tf,terraform/gcp/gcs.tf",
-            "log-file": true,
-            "minimal-ui": false,
-            "no-color": false,
-            "no-progress": true,
-            "output-path": "./results-dir",
-            "payload-path": "file path to store source internal representation in JSON format",
-            "preview-lines": 5,
-            "report-formats": "json,sarif",
-            "type": "terraform",
-            "verbose": true
-          }
-          EOF
       - name: Run KICS Scan using config
         uses: Checkmarx/kics-github-action@v1.7.0
         with:
-          path: 'terraform'
-          config_path: ./kics.config
+          output_path: results-dir
+          platform_type: terraform
+          output_formats: 'json,sarif'
+          exclude_paths: "terraform/gcp/big_data.tf,terraform/azure"
+          # seek query id in it's metadata.json
+          exclude_queries: 0437633b-daa6-4bbc-8526-c0d2443b946e
+      - name: Show Results JSON and SARIF
+        run: |
+          cat results-dir/results.sarif
+          cat results-dir/results.json
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v2
         with:
