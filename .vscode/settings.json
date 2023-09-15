@@ -1,0 +1,11 @@
+{
+  "cx.server": {
+    "url": "http://checkmarxn8/",
+    "alias": "CxSAST",
+    "username": "n8user",
+    "password": "ciW7/7b+UUYwtJWqNw/QMeuxQ/sosF4f5Pw=",
+    "project_id": 228,
+    "team_id": 1,
+    "project_name": "PocSast"
+  }
+}
