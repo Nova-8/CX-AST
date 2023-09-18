@@ -17,7 +17,6 @@ on:
   push:
     branches:
     - main
-    - master
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel - this job is specifically configured to use the Checkmarx CxFlow Action
 jobs:
@@ -28,30 +27,23 @@ jobs:
     # Steps require - checkout code, run CxFlow Action, Upload SARIF report (optional)
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Checkmarx CxFlow Action
-      uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.4
+      uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.9
       with:
         project: ${{ github.event.repository.name }}
         team: /CxServer
-        checkmarx_url: ${{ secrets.CHECKMARX_URL }}  # To be stored in GitHub Secrets.
-        checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }}  # To be stored in GitHub Secrets.
-        checkmarx_password: ${{ secrets.CHECKMARX_PASSWORD }}  # To be stored in GitHub Secrets.
-        checkmarx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }}  # To be stored in GitHub Secrets.
-        sca_api_url: https://api.scacheckmarx.com
-        sca_app_url: https://sca.scacheckmarx.com
-        sca_access_control_url: https://platform.checkmarx.net
-        sca_tenant: SCA-champions  # <-- Insert Checkmarx CxSCA Tenant
-        sca_username: ${{ secrets.CHECKMARX_SCA_USERNAME }} # To be stored in GitHub Secrets.
-        sca_password: ${{ secrets.CHECKMARX_SCA_PASSWORD }} # To be stored in GitHub Secrets.
-        github_token: ${{secrets.GH_TOKEN}}  # To be stored in GitHub Secrets.
+        base_uri: https://eu.ast.checkmarx.net/
+        cx_tenant: ${{secrets.CX_TENANT}}
+        cx_client_id: ${{secrets.CX_CLIENT_ID}}
+        cx_client_secret: ${{secrets.CX_CLIENT_SECRET}}
         incremental: false
-        scanners: sast, sca
+        scanners: sast
         bug_tracker: Sarif
         params: --cx-flow.zip-exclude=".github/" --namespace=${{ github.repository_owner }} --repo-name=${{ github.event.repository.name }} --branch=${{ github.ref }} --checkmarx.settings-override=true
    
     # Upload the Report for CodeQL/Security Alerts
     - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v1
+      uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: cx.sarif
